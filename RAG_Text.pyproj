@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0a1a5683-6972-4866-91a5-fca783fe2130</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>sqlite-utility.py</StartupFile>
+    <StartupFile>word2vec.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>RAG_Text</Name>
     <RootNamespace>RAG_Text</RootNamespace>
+    <InterpreterId>Global|PythonCore|3.12</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +26,10 @@
     <Compile Include="parse_book.py" />
     <Compile Include="query_data.py" />
     <Compile Include="sqlite-utility.py" />
+    <Compile Include="word2vec.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.12" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/cleaned-model
+/cleaned-model.vectors.npy
+/word2vec-google-news-300.model
+/word2vec-google-news-300.model.vectors.npy
