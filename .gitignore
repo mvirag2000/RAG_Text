@@ -365,3 +365,6 @@ FodyWeavers.xsd
 /cleaned-model.vectors.npy
 /word2vec-google-news-300.model
 /word2vec-google-news-300.model.vectors.npy
+/glove.6B.300d.txt
+/glove-model
+/glove-model.vectors.npy
