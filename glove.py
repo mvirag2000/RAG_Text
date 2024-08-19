@@ -1,6 +1,7 @@
 ##
 ## Try making a vector DB out of Glove text
 ##
+from math import dist
 from gensim.models import KeyedVectors
 from sklearn.preprocessing import normalize
 import numpy as np
@@ -32,4 +33,39 @@ vector = model[word]
 similar_words = model.most_similar(word, topn=30)
 for item in similar_words: 
     print(item)
+
+word1 = 'hot'
+word2 = 'cold'
+similarity = model.similarity(word1, word2)
+print(f'Similarity: {similarity}')
+
+def cosine(word1, word2):
+    vector1 = model[word1]
+    vector2 = model[word2]
+    dot = np.dot(vector1, vector2)
+    # return similarity # In case vectors aren't normed 
+    return dot
+    norm1 = np.linalg.norm(vector1, ord=2)
+    norm2 = np.linalg.norm(vector2, ord=2)
+    similarity = dot / (norm1 * norm2)
+    return similarity
+
+def euclid(word1, word2):
+    vector1 = model[word1]
+    vector2 = model[word2]
+    dist = np.linalg.norm(vector1 - vector2)
+    return dist
+
+distance = euclid(word1, word2)
+print(f'Distance: {distance}')
+
+distance = np.sqrt(2 * (1 - similarity)) # Same as Euclid if vectors are normed 
+print(f'Distance: {distance}')
+
+distance = model.distance(word1, word2) # This is WMD distance not Euclid 
+print(f'Distance: {distance}')
+
+
+
+
 
