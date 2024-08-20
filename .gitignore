@@ -368,3 +368,6 @@ FodyWeavers.xsd
 /glove.6B.300d.txt
 /glove-model
 /glove-model.vectors.npy
+/enwiki_upos_skipgram_300_2_2021.txt
+/wiki-model.vectors.npy
+/wiki-model

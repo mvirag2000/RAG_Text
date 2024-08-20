@@ -28,16 +28,16 @@ def load_model(init=True):
     return glove_model
 
 model = load_model(False)
-word = 'carriage'
+word = 'sigarms'
 vector = model[word]   
-similar_words = model.most_similar(word, topn=30)
+similar_words = model.most_similar(word, topn=50)
 for item in similar_words: 
     print(item)
 
 word1 = 'hot'
 word2 = 'cold'
 similarity = model.similarity(word1, word2)
-print(f'Similarity: {similarity}')
+#print(f'Similarity: {similarity}')
 
 def cosine(word1, word2):
     vector1 = model[word1]
@@ -58,10 +58,8 @@ def euclid(word1, word2):
 
 distance = euclid(word1, word2)
 print(f'Distance: {distance}')
-
 distance = np.sqrt(2 * (1 - similarity)) # Same as Euclid if vectors are normed 
 print(f'Distance: {distance}')
-
 distance = model.distance(word1, word2) # This is WMD distance not Euclid 
 print(f'Distance: {distance}')
 
