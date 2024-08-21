@@ -371,3 +371,6 @@ FodyWeavers.xsd
 /enwiki_upos_skipgram_300_2_2021.txt
 /wiki-model.vectors.npy
 /wiki-model
+/gigaword5.txt
+/gigaword
+/gigaword.vectors.npy

@@ -7,9 +7,11 @@ from sklearn.preprocessing import normalize
 import numpy as np
 
 def load_model(init=True):
-    # Refresh monster file only as needed 
+    # Processed a few of these, so variable names
+    distro = 'gigaword5.txt'
+    model_name = 'gigaword'
     if (init):
-        with open("enwiki_upos_skipgram_300_2_2021.txt", 'r', encoding="utf-8") as f:
+        with open(distro, 'r', encoding="utf-8") as f:
             vecs = []
             w_list = []
             for line in f:
@@ -26,13 +28,13 @@ def load_model(init=True):
         print("Words: " + str(vectors.shape[0]))
         model = KeyedVectors(vectors.shape[1])
         model.add_vectors(w_list, vectors, replace=True)
-        model.save("wiki-model")
+        model.save(model_name)
     else:
-        model = KeyedVectors.load("wiki-model")
+        model = KeyedVectors.load(model_name)
     return model
 
 model = load_model(False)
-word = 'gold'
+word = 'jack'
 vector = model[word]   
 similar_words = model.most_similar(word, topn=30)
 for item in similar_words: 

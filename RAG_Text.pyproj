@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0a1a5683-6972-4866-91a5-fca783fe2130</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>wikipedia.py</StartupFile>
+    <StartupFile>spacy_demo.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="create_database.py" />
+    <Compile Include="spacy_demo.py" />
     <Compile Include="wikipedia.py" />
     <Compile Include="parse_book.py" />
     <Compile Include="query_data.py" />
