@@ -31,9 +31,20 @@ def load_model(init=True):
     return clean_model
 
 model = load_model(False)
-word = 'apple'
-vector = model[word]   
-similar_words = model.most_similar(word, topn=30)
-for item in similar_words: 
-    print(item)
+keys = model.key_to_index.keys()
+giant = -0.0084
+enemy = 0.0835
+tolerance = 0.0001
+for w in keys:
+    simil_giant = model.similarity(w, "giant")
+    if ((simil_giant < giant + tolerance) and  (simil_giant > giant - tolerance)):
+        simil_enemy = model.similarity(w, "enemy")
+        if ((simil_enemy < enemy + tolerance) and  (simil_enemy > enemy - tolerance)):
+            print(w)
+
+#word = 'apple'
+#vector = model[word]   
+#similar_words = model.most_similar(word, topn=5)
+#for item in similar_words: 
+#    print(item)
 
