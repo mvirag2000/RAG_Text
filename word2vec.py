@@ -30,16 +30,21 @@ def load_model(init=True):
         clean_model = KeyedVectors.load("cleaned-model")
     return clean_model
 
+def in_tolerance(num1, num2, tol=0.0001):
+    if ((num1 - num2) > tol): return False
+    if ((num2 - num1) > tol): return False
+    return True
+
 model = load_model(False)
 keys = model.key_to_index.keys()
-giant = -0.0084
-enemy = 0.0835
+giant = 0.0144
+enemy = 0.1319
 tolerance = 0.0001
 for w in keys:
     simil_giant = model.similarity(w, "giant")
-    if ((simil_giant < giant + tolerance) and  (simil_giant > giant - tolerance)):
+    if in_tolerance(simil_giant, giant):
         simil_enemy = model.similarity(w, "enemy")
-        if ((simil_enemy < enemy + tolerance) and  (simil_enemy > enemy - tolerance)):
+        if in_tolerance(simil_enemy, enemy):
             print(w)
 
 #word = 'apple'
