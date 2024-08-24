@@ -1,7 +1,15 @@
-book = open("data/tolstoy/book-war-and-peace", 'r')
+##
+## Break book into Chapter files for use as RAG metadata
+##
+# directory = "data/eliot/" 
+# source = directory + "Middlemarch"
+directory = "data/tolstoy/" 
+source = directory + "book-war-and-peace"
+
+book = open(source, 'r')
 chapno = 1
-chapter = open("data/tolstoy/Chapter_1.txt", 'w')
-line1 = book.readline() # Skip first line
+chapter = open(directory + "Chapter_1.txt", 'w')
+line1 = book.readline() # Skip first CHAPTER heading 
 
 for line in book:
     line = line.rstrip()
@@ -9,7 +17,7 @@ for line in book:
         chapter.close()
         print("Closing Chapter " + str(chapno))
         chapno += 1
-        chapter = open("data/tolstoy/Chapter_" + str(chapno) + ".txt", 'w')
+        chapter = open(directory + "Chapter_" + str(chapno) + ".txt", 'w')
     else:
         chapter.write(line + ' ')
     # if (chapno == 10): break

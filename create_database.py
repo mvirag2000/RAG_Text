@@ -16,8 +16,9 @@ import shutil
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-CHROMA_PATH = "chroma"
-DATA_PATH = "data/tolstoy"
+DATA_PATH = "data/tolstoy" 
+# DATA_PATH = "data/eliot" 
+CHROMA_PATH = DATA_PATH + "/chroma" 
 
 loader = DirectoryLoader(DATA_PATH, glob="*.txt", loader_cls=TextLoader)
 documents = loader.load()
