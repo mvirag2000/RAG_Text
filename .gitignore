@@ -376,3 +376,10 @@ FodyWeavers.xsd
 /gigaword.vectors.npy
 /data/eliot/Middlemarch.txt
 /data
+/chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/data_level0.bin
+/chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/header.bin
+/chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/index_metadata.pickle
+/chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/length.bin
+/chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/link_lists.bin
+/chroma/chroma.sqlite3
+/chroma
