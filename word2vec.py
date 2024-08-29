@@ -16,7 +16,7 @@ def load_model(init=True):
         vecs = []
         w_list = []
         ascii_subset = re.compile(r"^[a-z]+$")
-        # Much garbage in this dataset h/t Theo for cleaning routine
+        # Much garbage in this dataset h/t Theo for the cleaning routine
         for w in words:
             if  ascii_subset.match(w): 
                 w_list.append(w)
@@ -47,9 +47,15 @@ for w in keys:
         if in_tolerance(simil_enemy, enemy):
             print(w)
 
-#word = 'apple'
-#vector = model[word]   
-#similar_words = model.most_similar(word, topn=5)
-#for item in similar_words: 
-#    print(item)
+word = 'inevitable'
+vector = model[word]   
+similar_words = model.most_similar(word, topn=5)
+for item in similar_words: 
+    print(item)
+
+print(model.similarity("inevitable", "inexorable"))
+print(model.similarity("inevitable", "ineluctable"))
+print(model.similarity("ineluctable", "inexorable"))
+
+
 
