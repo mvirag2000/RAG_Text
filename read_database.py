@@ -22,3 +22,8 @@ result = collection.get(
     )
 for item in result: print(item, result[item])  
 print(len(result["embeddings"][0])) # It looks like the OpenAI default is 1536 
+
+
+for b in range(collection.count()):
+    b_doc = collection.get(ids=[str(b)])
+    print(b_doc["ids"][0] + " " + b_doc["documents"][0][:40] + " " + b_doc["metadatas"][0]["source"] + " " + str(b_doc["metadatas"][0]["start_index"]))
