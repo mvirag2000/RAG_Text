@@ -32,36 +32,37 @@ def get_by_id(collection, id: int, include=False):
         )
     return result
 
-def main():
+def brute_scan(my_vec, collection):
+    dist_list = []
+    for i in range(collection.count()):
+        doc = get_by_id(collection, i, True)
+        vec = doc["embeddings"][0]    
+        cosine = np.dot(my_vec, vec)
+        dist_list.append(cosine)
+    return dist_list
 
-    tolstoy = set_paths("tolstoy")
-    eliot = set_paths("eliot")
-
-    #for i in range(eliot.count()):
-    #    r = get_by_id(eliot, i)
-    #    print(r["ids"][0] + " " + r["documents"][0][:40] + " " + r["metadatas"][0]["source"] + " " + str(r["metadatas"][0]["start_index"]))
-
-    cosines = []
-    for a in range(tolstoy.count()):
-        a_doc = get_by_id(tolstoy, a, True)
-        a_vec = a_doc["embeddings"][0]    
-        for b in range(eliot.count()):
-            b_doc = get_by_id(eliot, b, True)
-            b_vec = b_doc["embeddings"][0]    
-            cosine = np.dot(a_vec, b_vec)
-            #if (cosine > 0.82):
-            #    print(a_doc["ids"][0] + " " + a_doc["documents"][0][:40] + " " + a_doc["metadatas"][0]["source"] + " " + str(a_doc["metadatas"][0]["start_index"]))
-            #    print(b_doc["ids"][0] + " " + b_doc["documents"][0][:40] + " " + b_doc["metadatas"][0]["source"] + " " + str(b_doc["metadatas"][0]["start_index"]))
-            #    print()
-            cosines.append(cosine)
-      
+def make_chart(c):
     fig = plt.figure(figsize=(9,5))
     ax1 = fig.add_subplot(111)
-    ax1.hist(cosines, bins=50, density=True)
+    ax1.hist(c, bins=50, density=True)
     ax1.set_xlabel('Score')
     ax1.set_ylabel('Probability')
     ax1.set_title('Similarity of Text Chunks across Novels')
     plt.show()
+
+def main():
+    tolstoy = set_paths("tolstoy")
+    eliot = set_paths("eliot")
+    cosines = []
+    for i in range(tolstoy.count()):
+        doc = get_by_id(tolstoy, i, True)
+        vec = doc["embeddings"][0]    
+        dist_list = brute_scan(vec, eliot)
+        cosines.extend(dist_list)
+    print(f"Mean: {np.mean(cosines): .2f}")
+    print(f"Std Dev: {np.std(cosines): .2f}")
+    print(f"Max: {np.max(cosines): .2f}")
+    make_chart(cosines) 
 
 if __name__ == "__main__":
     main()

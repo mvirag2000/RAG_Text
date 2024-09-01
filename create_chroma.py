@@ -21,13 +21,9 @@ import shutil
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-collection_name = "eliot"
-DATA_PATH = "data/" + collection_name
-CHROMA_PATH = DATA_PATH + "/chroma" # Decided separate DB's were better 
-ai_client = OpenAI() 
 
 def create_embedding(string, client):
-    e = ai_client.embeddings.create(
+    e = OpenAI().embeddings.create(
         model="text-embedding-3-small",
         input=string,
         encoding_format="float"
@@ -60,6 +56,8 @@ def display_chunk(chunks, id: int):
 
 def create_chroma(chunks, path, name):
 
+    model_name="text-embedding-3-small"
+    
     # Clear out the database first.
     if os.path.exists(path):
         shutil.rmtree(path)
@@ -67,16 +65,22 @@ def create_chroma(chunks, path, name):
     # Create a new DB from the documents.
     db = Chroma.from_documents(
         chunks, 
-        OpenAIEmbeddings(), 
+        OpenAIEmbeddings(model=model_name), 
         persist_directory=path, 
         ids=[str(i) for i in range(len(chunks))],
         collection_name=name,
         )
-    db.persist()
-    print(f"Saved {len(chunks)} chunks to {CHROMA_PATH}.")
+
+    print(f"Saved {len(chunks)} chunks to {path}.")
+    readme = open(path + "\\readme.txt", 'w')
+    readme.write("Created using LangChain and " + model_name)
+    readme.close()
+
 
 def create_chroma_native(docs, path, name):
     # Create vector store without LangChain 
+
+    model_name="text-embedding-3-small"
 
     # Clear directory or collection
     if os.path.exists(path):
@@ -85,7 +89,7 @@ def create_chroma_native(docs, path, name):
     client = chromadb.Client(Settings(is_persistent=True, persist_directory=path))
     # if collection_name in [c.name for c in client.list_collections()]: client.delete_collection(name=collection_name)
 
-    openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name="text-embedding-3-small")
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name=model_name)
     collection = client.create_collection(name=name, embedding_function=openai_ef)
 
     chunk_size = 1000 # Because OpenAI API won't take the whole list 
@@ -97,12 +101,20 @@ def create_chroma_native(docs, path, name):
             metadatas = [doc.metadata for doc in docs],
             ids=[str(i + c * chunk_size) for i in range(len(docs))],
         )
-        print(f"Saved {len(docs)} chunks to {CHROMA_PATH}.")
+        print(f"Saved {len(docs)} chunks to {path}.")
+
+    readme = open(path + "\\readme.txt", 'w')
+    readme.write("Created using native Chroma with " + model_name)
+    readme.close()
 
 def main():
+    collection_name = "tolstoy"
+    DATA_PATH = "data/" + collection_name
+    CHROMA_PATH = DATA_PATH + "/chroma" # Decided separate DB's were better 
+
     chunks = parse_book(DATA_PATH)
     display_chunk(chunks, 10)
-    create_chroma_native(chunks, CHROMA_PATH, collection_name) 
+    create_chroma(chunks, CHROMA_PATH, collection_name) 
 
 if __name__ == "__main__":
     main()
