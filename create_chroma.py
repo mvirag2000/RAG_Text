@@ -53,7 +53,7 @@ def create_chroma(chunks, path, name):
     readme.close()
 
 def main():
-    collection_name = "eliot"
+    collection_name = "tolstoy"
     DATA_PATH = "data/" + collection_name
     CHROMA_PATH = DATA_PATH + "/chroma" # Decided separate DB's were better 
 

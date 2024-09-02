@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0a1a5683-6972-4866-91a5-fca783fe2130</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>create_chroma.py</StartupFile>
+    <StartupFile>compare_texts.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

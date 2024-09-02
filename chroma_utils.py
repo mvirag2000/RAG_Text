@@ -10,6 +10,8 @@ import os
 import openai
 from openai import OpenAI
 import tiktoken
+import tkinter as tk
+from tkinter.scrolledtext import ScrolledText
 
 def GetCollection(name: str):
     chroma_path = "data/" + name + "/chroma"
@@ -53,7 +55,9 @@ def CreateChromaNative(docs, path, name):
     # if collection_name in [c.name for c in client.list_collections()]: client.delete_collection(name=collection_name)
 
     openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name=model_name)
-    collection = client.create_collection(name=name, embedding_function=openai_ef)
+    collection = client.create_collection(name=name, 
+        metadata={"hnsw:space": "cosine"}, # Actually, 1-Dot so cosine "distance" not "similarity" 
+        embedding_function=openai_ef)
 
     chunk_size = 1000 # Because OpenAI API won't take the whole list 
     chunk_docs = [docs[i : i + chunk_size] for i in range(0, len(docs), chunk_size)]
@@ -70,7 +74,7 @@ def CreateChromaNative(docs, path, name):
     readme.write("Created using native Chroma with " + model_name)
     readme.close()
 
-def CreateEmbedding(string, client): 
+def CreateEmbedding(string): 
     e = OpenAI().embeddings.create(
         model="text-embedding-3-small",
         input=string,
@@ -88,3 +92,20 @@ def DisplayChunk(chunks, id: int):
     print(document.page_content)
     print(document.metadata)
     print(num_tokens_from_string(document.page_content))
+
+def DisplayDocs(title, results):
+    window = tk.Tk()
+    window.title(title)
+    window.geometry("650x300") 
+    text_widget = tk.Text(window, wrap="word", font=("Arial", 10))
+    text_widget.pack(side="left", fill="both", expand=True)
+    scrollbar = tk.Scrollbar(window, orient="vertical", command=text_widget.yview)
+    scrollbar.pack(side="right", fill="y")
+    text_widget.config(yscrollcommand=scrollbar.set)
+    length = len(results['ids'][0])
+    for idx in range(length):
+        text_widget.insert(tk.END, "Id: {}".format(results['ids'][0][idx]))
+        text_widget.insert(tk.END, " Distance:{:.2f}\n".format(results['distances'][0][idx]))
+        text_widget.insert(tk.END, str(results['metadatas'][0][idx]) + '\n')
+        text_widget.insert(tk.END, results['documents'][0][idx] + '\n\n')
+    window.mainloop()

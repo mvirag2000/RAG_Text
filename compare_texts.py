@@ -5,9 +5,7 @@ from dotenv import load_dotenv
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from chroma_utils import GetCollection, GetDocById, BruteScan
-
-load_dotenv()
+from chroma_utils import CreateEmbedding, DisplayDocs, GetCollection, GetDocById, BruteScan
 
 def make_chart(c):
     fig = plt.figure(figsize=(9,5))
@@ -21,16 +19,17 @@ def make_chart(c):
 def main():
     tolstoy = GetCollection("tolstoy")
     eliot = GetCollection("eliot")
-    cosines = []
-    for i in range(2):
-        doc = GetDocById(tolstoy, i, True)
-        vec = doc["embeddings"][0]    
-        dist_list = BruteScan(vec, eliot)
-        cosines.extend(dist_list)
-    print(f"Mean: {np.mean(cosines): .2f}")
-    print(f"Std Dev: {np.std(cosines): .2f}")
-    print(f"Max: {np.max(cosines): .2f}")
-    make_chart(cosines) 
+    for i in range(eliot.count()):
+        doc = GetDocById(eliot, i, True)
+        query_vec = doc["embeddings"][0]    
+        results = tolstoy.query(
+            query_embeddings=query_vec,
+            n_results = 3)
+        if (min(results['distances'][0]) < 0.25): # Distance NOT similarity 
+            print(doc["metadatas"][0])
+            print(doc["documents"][0])
+            print()
+            DisplayDocs("Tolstoy Results", results)
 
 if __name__ == "__main__":
     main()

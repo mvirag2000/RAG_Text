@@ -1,15 +1,13 @@
 import argparse
-# from dataclasses import dataclass
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_chroma import Chroma 
-import chromadb
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 
-CHROMA_PATH = "chroma"
+CHROMA_PATH = "data/tolstoy/chroma"
 
 PROMPT_TEMPLATE = """Answer this question: {question} based on these excerpts: {context}"""
 
@@ -26,7 +24,7 @@ def show_text(title, text):
     window.mainloop()
 
 def main():
-    embedding_function = OpenAIEmbeddings()
+    embedding_function = OpenAIEmbeddings(model="text-embedding-3-small")
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     model = ChatOpenAI()
  
