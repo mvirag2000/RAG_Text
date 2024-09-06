@@ -25,7 +25,7 @@ def main():
         results = tolstoy.query(
             query_embeddings=query_vec,
             n_results = 3)
-        if (min(results['distances'][0]) < 0.25): # Distance NOT similarity 
+        if (min(results['distances'][0]) < 0.60): # Distance NOT similarity 
             print(doc["metadatas"][0])
             print(doc["documents"][0])
             print()

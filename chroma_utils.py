@@ -4,6 +4,7 @@
 import chromadb
 from chromadb.config import Settings
 from chromadb.utils import embedding_functions
+from dotenv import load_dotenv
 import numpy as np
 import shutil
 import os
@@ -13,12 +14,16 @@ import tiktoken
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 
+load_dotenv()
+openai.api_key = os.environ['OPENAI_API_KEY']
+model_name="text-embedding-3-large"
+
 def GetCollection(name: str):
     chroma_path = "data/" + name + "/chroma"
     client = chromadb.Client(Settings(is_persistent=True, persist_directory=chroma_path))
+    openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name=model_name)
     # print([c.name for c in client.list_collections()])
-    collection = client.get_collection(name=name)
-    # db = Chroma(persist_directory=chroma_path)
+    collection = client.get_collection(name=name, embedding_function=openai_ef)
     return collection
 
 def GetDocById(collection, id: int, include=False):
@@ -45,8 +50,6 @@ def BruteScan(my_vec, collection):
 
 def CreateChromaNative(docs, path, name):
 
-    model_name="text-embedding-3-small"
-
     # Clear directory or collection
     if os.path.exists(path):
         shutil.rmtree(path)
@@ -59,12 +62,12 @@ def CreateChromaNative(docs, path, name):
         metadata={"hnsw:space": "cosine"}, # Actually, 1-Dot so cosine "distance" not "similarity" 
         embedding_function=openai_ef)
 
-    chunk_size = 1000 # Because OpenAI API won't take the whole list 
+    chunk_size = 100 # Because OpenAI API won't take the whole list 
     chunk_docs = [docs[i : i + chunk_size] for i in range(0, len(docs), chunk_size)]
 
     for c, docs in enumerate(chunk_docs): # This is a nested list: chunk_docs(docs(doc))
 
-        collection.add(documents = [doc.page_content for doc in docs],  
+        collection.add(documents = [doc.page_content for doc in docs], # This line throws error 400 if docs is too big (length or chunk size)
             metadatas = [doc.metadata for doc in docs],
             ids=[str(i + c * chunk_size) for i in range(len(docs))],
         )
@@ -76,7 +79,7 @@ def CreateChromaNative(docs, path, name):
 
 def CreateEmbedding(string): 
     e = OpenAI().embeddings.create(
-        model="text-embedding-3-small",
+        model=model_name,
         input=string,
         encoding_format="float"
     )

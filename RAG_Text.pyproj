@@ -23,8 +23,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="chroma_utils.py" />
+    <Compile Include="compare_methods.py" />
     <Compile Include="compare_texts.py" />
-    <Compile Include="read_database.py" />
     <Compile Include="create_chroma.py" />
     <Compile Include="spacy_demo.py" />
     <Compile Include="wikipedia.py" />
