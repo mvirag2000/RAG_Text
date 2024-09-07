@@ -1,0 +1,16 @@
+TEXT Embeddings
+chroma_utils - collection of utility functions for working with Chroma
+compare_methods - to show that search by vector and by string work the same
+compare_texts - find similar passages between two novels
+cosine_histogram - plot similarity for all pairs of passages across two novels
+create_chroma - create a Chroma database using LangChain or native
+parse_book - break a novel into chapters for use as metadata
+query_data - run similarity search and pass results to Chat for comment
+single_query - run one query different ways and pass to Chat for comment
+
+WORD Embeddings
+glove - experiment with Glove embedding
+spacy_demo - experiment with Spacy embedding
+sqlite_utlity - access Chroma's underlying SQL database
+wikipedia - experiment with yet another embedding
+word2vec - use word2vec and gensim to beat Semantle

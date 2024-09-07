@@ -5,7 +5,7 @@ from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker 
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma 
 from langchain_openai import OpenAIEmbeddings
 import openai
 from openai import OpenAI
@@ -17,7 +17,7 @@ from chroma_utils import CreateChromaNative, DisplayChunk, DisplayDocs
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-model_name="text-embedding-3-large"
+model_name="text-embedding-ada-002"
 
 def create_chroma(chunks, path, name):
         
@@ -32,6 +32,7 @@ def create_chroma(chunks, path, name):
         persist_directory=path, 
         ids=[str(i) for i in range(len(chunks))],
         collection_name=name,
+        collection_metadata={"hnsw:space": "cosine"},
         )
     print(f"Saved {len(chunks)} chunks to {path}.")
     readme = open(path + "\\readme.txt", 'w')
@@ -61,7 +62,7 @@ def parse_book(path):
 def main():
     collection_name = "tolstoy"
     DATA_PATH = "data/" + collection_name
-    CHROMA_PATH = DATA_PATH + "/chroma" # Decided separate DB's were better 
+    CHROMA_PATH = DATA_PATH + "/chroma3" # Decided separate DB's were better 
 
     chunks = parse_book(DATA_PATH)
     DisplayChunk(chunks, 10)

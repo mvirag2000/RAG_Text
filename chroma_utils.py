@@ -16,7 +16,6 @@ from tkinter.scrolledtext import ScrolledText
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-model_name="text-embedding-3-large"
 
 def GetCollection(name: str):
     chroma_path = "data/" + name + "/chroma"
