@@ -16,9 +16,10 @@ from tkinter.scrolledtext import ScrolledText
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
+model_name = 'text-embedding-ada-002' 
 
 def GetCollection(name: str):
-    chroma_path = "data/" + name + "/chroma"
+    chroma_path = "data/" + name + "/chroma3"
     client = chromadb.Client(Settings(is_persistent=True, persist_directory=chroma_path))
     openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name=model_name)
     # print([c.name for c in client.list_collections()])

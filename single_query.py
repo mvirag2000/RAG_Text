@@ -11,10 +11,18 @@ from chroma_utils import DisplayDocs, num_tokens_from_string
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-query_text = 'Did the Russians set fire to Moscow?'
+
+# CHROMA_PATH = "data/tolstoy/chroma3"
+# collection_name = 'tolstoy'
+# query_text = 'Did the Russians set fire to Moscow?'
 # query_text = 'How many siblings does Natasha have?'
 # query_text = 'Why doesn''t Andrew marry Natasha?'
-CHROMA_PATH = "data/tolstoy/chroma3"
+# query_text = 'How is Sonya related to the Rostovs?'
+
+CHROMA_PATH = "data/eliot/chroma3"
+collection_name = 'eliot'
+query_text = 'Is there intrigue over the beneficiary of a wealthy person''s will?'
+
 model_name = "text-embedding-ada-002" 
 PROMPT_TEMPLATE = """
 Here is some context for the question that follows:
@@ -32,11 +40,11 @@ def main():
 
     client = chromadb.Client(Settings(is_persistent=True, persist_directory=CHROMA_PATH))
     openai_ef = embedding_functions.OpenAIEmbeddingFunction(api_key=openai.api_key, model_name=model_name)
-    tolstoy = client.get_collection(name='tolstoy', embedding_function=openai_ef)
+    collection = client.get_collection(name=collection_name, embedding_function=openai_ef)
 
-    results = tolstoy.query(
+    results = collection.query(
         query_texts=[query_text],
-        n_results = 5
+        n_results = 10
         )
 
     if len(results) == 0 or results['distances'][0][0] > 0.40:

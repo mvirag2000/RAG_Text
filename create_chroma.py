@@ -60,7 +60,7 @@ def parse_book(path):
     return chunks
 
 def main():
-    collection_name = "tolstoy"
+    collection_name = "eliot"
     DATA_PATH = "data/" + collection_name
     CHROMA_PATH = DATA_PATH + "/chroma3" # Decided separate DB's were better 
 

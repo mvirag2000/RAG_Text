@@ -7,6 +7,7 @@ create_chroma - create a Chroma database using LangChain or native
 parse_book - break a novel into chapters for use as metadata
 query_data - run similarity search and pass results to Chat for comment
 single_query - run one query different ways and pass to Chat for comment
+double_query - run same query against both novels and pass to Chat for comment
 
 WORD Embeddings
 glove - experiment with Glove embedding
