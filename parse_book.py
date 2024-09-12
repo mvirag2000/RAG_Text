@@ -3,8 +3,8 @@
 ##
 # directory = "data/eliot/" 
 # source = directory + "Middlemarch"
-directory = "data/eliot/" 
-source = directory + "Middlemarch"
+directory = "data/thackeray/" 
+source = directory + "vanity-fair"
 
 book = open(source, 'r')
 chapno = 1

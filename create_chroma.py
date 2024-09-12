@@ -17,7 +17,7 @@ from chroma_utils import CreateChromaNative, DisplayChunk, DisplayDocs
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-model_name="text-embedding-ada-002"
+model_name="text-embedding-3-small"
 
 def create_chroma(chunks, path, name):
         
@@ -62,7 +62,7 @@ def parse_book(path):
 def main():
     collection_name = "eliot"
     DATA_PATH = "data/" + collection_name
-    CHROMA_PATH = DATA_PATH + "/chroma3" # Decided separate DB's were better 
+    CHROMA_PATH = DATA_PATH + "/chroma2" # Decided separate DB's were better 
 
     chunks = parse_book(DATA_PATH)
     DisplayChunk(chunks, 10)
