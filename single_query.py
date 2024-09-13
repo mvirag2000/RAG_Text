@@ -12,18 +12,20 @@ from chroma_utils import DisplayDocs, num_tokens_from_string
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
 
-CHROMA_PATH = "data/tolstoy/chroma3"
+CHROMA_PATH = "data/tolstoy/chroma2"
 collection_name = 'tolstoy'
-query_text = 'Did the Russians set fire to Moscow?'
+# query_text = 'Who is the best Russian general?'
+# query_text = 'Did the Russians set fire to Moscow?'
 # query_text = 'How many siblings does Natasha have?'
-# query_text = 'Why doesn''t Andrew marry Natasha?'
+query_text = 'Why doesn''t Andrew marry Natasha?'
 # query_text = 'How is Sonya related to the Rostovs?'
 
 # CHROMA_PATH = "data/eliot/chroma3"
 # collection_name = 'eliot'
 # query_text = 'Is there intrigue over the beneficiary of a wealthy person''s will?'
 
-model_name = "text-embedding-ada-002" 
+model_name = "text-embedding-3-small" 
+# model_name = "text-embedding-ada-002" 
 PROMPT_TEMPLATE = """
 Here is some context for the question that follows:
 

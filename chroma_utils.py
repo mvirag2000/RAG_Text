@@ -96,7 +96,7 @@ def DisplayChunk(chunks, id: int):
     print(document.metadata)
     print(num_tokens_from_string(document.page_content))
 
-def DisplayDocs(title, results):
+def DisplayDocs(title, results): # Results from sililarity search includes DISTANCE
     window = tk.Tk()
     window.title(title)
     window.geometry("650x300") 
@@ -111,4 +111,18 @@ def DisplayDocs(title, results):
         text_widget.insert(tk.END, " Distance:{:.2f}\n".format(results['distances'][0][idx]))
         text_widget.insert(tk.END, str(results['metadatas'][0][idx]) + '\n')
         text_widget.insert(tk.END, results['documents'][0][idx] + '\n\n')
+    window.mainloop()
+
+def DisplayOne(title, results): # Results from sililarity search includes DISTANCE
+    window = tk.Tk()
+    window.title(title)
+    window.geometry("650x300") 
+    text_widget = tk.Text(window, wrap="word", font=("Arial", 10))
+    text_widget.pack(side="left", fill="both", expand=True)
+    scrollbar = tk.Scrollbar(window, orient="vertical", command=text_widget.yview)
+    scrollbar.pack(side="right", fill="y")
+    text_widget.config(yscrollcommand=scrollbar.set)
+    text_widget.insert(tk.END, "Id: {}".format(results['ids'][0]))
+    text_widget.insert(tk.END, str(results['metadatas'][0]) + '\n')
+    text_widget.insert(tk.END, results['documents'][0] + '\n\n')
     window.mainloop()
