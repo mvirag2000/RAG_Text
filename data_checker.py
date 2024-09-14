@@ -4,13 +4,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from chroma_utils import DisplayOne, GetCollection, GetDocById
+from chroma_utils import CrossDistances, DisplayOne, GetCollection, GetDocById
 from sklearn.decomposition import PCA
 from sklearn.cluster import AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
 
-collection_name = "eliot"
+collection_name = "thackeray"
 collection_path = "chroma3" 
+model_name = "text-embedding-3-small"
 
 def plot_dendrogram(model, **kwargs):
     # Create linkage matrix and then plot the dendrogram
@@ -35,10 +36,10 @@ def plot_dendrogram(model, **kwargs):
     dendrogram(linkage_matrix, **kwargs)
 
 def main():
-    # model_name doesn't matter because no new embedding here 
+
     print("Collection: " + collection_name)
 
-    collection = GetCollection(collection_name, collection_path)
+    collection = GetCollection(collection_name, collection_path, model_name)
     count = collection.count()
     print(f"Documents: {count:,}")
 
@@ -49,17 +50,15 @@ def main():
     docs = collection.get(include=["embeddings"])
     vectors = docs["embeddings"]
     ids = docs["ids"]
-
     
-    DisplayOne("Some doc", GetDocById(collection, 450))
+    rng = np.random.default_rng()
+    rand_item = rng.integers(0, count)
+    DisplayOne("Some doc", GetDocById(collection, rand_item))
     
-
-    pca = PCA(n_components=10)
+    n_comps = 60
+    pca = PCA(n_components=n_comps)
     reduced = pca.fit_transform(vectors)
-    print(pca.explained_variance_ratio_)
-    print(pca.explained_variance_ratio_.sum())
-
-  
+    print(f"Variance explained: {pca.explained_variance_ratio_.sum(): 0.2f} by: {n_comps:,} components")
 
     fig = plt.figure(figsize=(9,5))
     ax = fig.add_subplot(111)
@@ -73,17 +72,27 @@ def main():
     ax.set_xticks(ticks)
     plt.show()
 
-    clusters = AgglomerativeClustering(n_clusters=5, metric='cosine', linkage='complete', compute_distances=True)
-    clusters.fit(vectors)
+    self_similarity = CrossDistances(collection, collection, stats=False)
+    max_dist = 1 - np.min(self_similarity)
+    print(f"Max distance: {max_dist: .2f}")
+    self_similarity = [x for x in self_similarity if x < 0.99] # Remove the same-doc results 
 
-    plt.title("Hierarchical Clustering Dendrogram")
-    # plot the top three levels of the dendrogram
-    plot_dendrogram(clusters, truncate_mode="level", p=3)
-    plt.xlabel("Number of points in node (or index of point if no parenthesis).")
+    fig = plt.figure(figsize=(9,5))
+    ax1 = fig.add_subplot(111)
+    ax1.hist(self_similarity, bins=200, density=True)
+    ax1.set_xlabel('Cosine Similarity')
+    ax1.set_ylabel('Frequency')
+    ax1.set_title('Similarity among Docs of Collection')
     plt.show()
 
-
-
+    linkage = 'complete'
+    cluster_model = AgglomerativeClustering(n_clusters=6, metric='cosine', linkage=linkage, compute_distances=True)
+    clusters = cluster_model.fit_predict(vectors)
+ 
+    plt.title("Hierarchical Clustering: " + collection_name + ", Linkage: " + linkage)
+    plot_dendrogram(cluster_model, truncate_mode="level", p=5, color_threshold=0.25)
+    plt.xlabel("Number of points in node (or index of point if no parenthesis).")
+    plt.show()
 
 if __name__ == "__main__":
     main()
