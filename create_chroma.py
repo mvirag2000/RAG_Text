@@ -13,11 +13,14 @@ from dotenv import load_dotenv
 import os
 import numpy as np 
 import shutil
-from chroma_utils import CreateChromaNative, DisplayChunk, DisplayDocs
+from chroma_utils import CreateChromaNative, PrintChunk
 
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
-model_name="text-embedding-3-small"
+
+collection_name = "tolstoy"
+collection_path = "chroma5" 
+model_name = "text-embedding-3-large"
 
 def create_chroma(chunks, path, name):
         
@@ -43,8 +46,8 @@ def parse_book(path):
     loader = DirectoryLoader(path, glob="*.txt", loader_cls=TextLoader)
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1200,
-        chunk_overlap=100,
+        chunk_size=800,
+        chunk_overlap=60,
         length_function=len,
         add_start_index=True,
     )
@@ -60,13 +63,10 @@ def parse_book(path):
     return chunks
 
 def main():
-    collection_name = "eliot"
-    DATA_PATH = "data/" + collection_name
-    CHROMA_PATH = DATA_PATH + "/chroma2" # Decided separate DB's were better 
 
-    chunks = parse_book(DATA_PATH)
-    DisplayChunk(chunks, 10)
-    create_chroma(chunks, CHROMA_PATH, collection_name) 
+    chunks = parse_book("data/" + collection_name)
+    PrintChunk(chunks, 10)
+    create_chroma(chunks, "data/" + collection_name + "/" + collection_path, collection_name) 
 
 if __name__ == "__main__":
     main()

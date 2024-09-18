@@ -13,8 +13,8 @@ import hdbscan
 sns.set_palette(sns.color_palette() )
 
 collection_name = "thackeray"
-collection_path = "chroma2" 
-model_name = "text-embedding-3-small"
+collection_path = "chroma4" 
+model_name = "text-embedding-3-large"
 
 def plot_dendrogram(model, **kwargs):
     # Create linkage matrix and then plot the dendrogram
@@ -46,14 +46,16 @@ def main():
     count = collection.count()
     print(f"Documents: {count:,}")
 
-    docs = collection.get(include=["embeddings"])
+    docs = collection.get(include=["embeddings", "documents"])
     vectors = docs["embeddings"]
     dims = len(vectors[0])
     print(f"Dimensions: {dims:,}")
+    chunk = len(docs["documents"][0])
+    print(f"Chunk size: {chunk:,}")
     
     rng = np.random.default_rng()
     rand_item = rng.integers(0, count)
-    # DisplayOne("Some doc", GetDocById(collection, rand_item))
+    DisplayOne("Some doc", GetDocById(collection, rand_item))
     
     n_comps = 20
     pca = PCA(n_components=n_comps)
@@ -101,6 +103,11 @@ def main():
         n_components=3,
     ).fit_transform(vectors)
 
+    # This approach flatters the reduction routine
+    # By clustering only in the reduced 3D space
+    # A better test would be to do clusters in high-D space 
+    # Then see if the reduction preserves them
+
     size = int(count * 0.02)
     hdb_model = hdbscan.HDBSCAN(
         min_cluster_size=size,
@@ -121,8 +128,6 @@ def main():
     plt.gca().set_aspect('equal', 'datalim')
     plt.title("UMAP projection of " + collection_name)
     plt.show()
-
-
 
 if __name__ == "__main__":
     main()

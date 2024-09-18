@@ -9,6 +9,7 @@ query_data - run similarity search and pass results to Chat for comment
 single_query - run one query different ways and pass to Chat for comment
 double_query - run same query against both novels and pass to Chat for comment
 data_checker - performs a variety of stats operations on a single collection
+clustering - attempts to find (and visualize) similar clusters from the text
 
 WORD Embeddings
 glove - experiment with Glove embedding
@@ -16,3 +17,10 @@ spacy_demo - experiment with Spacy embedding
 sqlite_utlity - access Chroma's underlying SQL database
 wikipedia - experiment with yet another embedding
 word2vec - use word2vec and gensim to beat Semantle
+
+DATA Directories
+Chroma - text-embedding-3-large with 1,200 char chunks
+Chroma2 - text-embedding-3-small with 1,200 char chunks 
+Chroma3 - text-embedding-ada-002 with 1,200 char chunks
+Chroma4 - text-embedding-3-large with 2,400 char chunks
+Chroma5 - text-embedding-3-large with 800 char chunks
