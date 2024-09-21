@@ -10,6 +10,7 @@ single_query - run one query different ways and pass to Chat for comment
 double_query - run same query against both novels and pass to Chat for comment
 data_checker - performs a variety of stats operations on a single collection
 clustering - attempts to find (and visualize) similar clusters from the text
+late_chunking - create database using latest chunking technique
 
 WORD Embeddings
 glove - experiment with Glove embedding
@@ -24,3 +25,4 @@ Chroma2 - text-embedding-3-small with 1,200 char chunks
 Chroma3 - text-embedding-ada-002 with 1,200 char chunks
 Chroma4 - text-embedding-3-large with 2,400 char chunks
 Chroma5 - text-embedding-3-large with 800 char chunks
+Chroma6 - late chunking
