@@ -21,8 +21,8 @@ word2vec - use word2vec and gensim to beat Semantle
 
 DATA Directories
 Chroma - text-embedding-3-large with 1,200 char chunks
-Chroma2 - text-embedding-3-small with 1,200 char chunks 
-Chroma3 - text-embedding-ada-002 with 1,200 char chunks
+Chroma2 - text-embedding-3-small with 1,200 char chunks ***
+Chroma3 - text-embedding-ada-002 with 1,200 char chunks ***
 Chroma4 - text-embedding-3-large with 2,400 char chunks
 Chroma5 - text-embedding-3-large with 800 char chunks
 Chroma6 - late chunking

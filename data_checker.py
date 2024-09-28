@@ -12,9 +12,9 @@ import umap
 import hdbscan 
 sns.set_palette(sns.color_palette() )
 
-collection_name = "thackeray"
-collection_path = "chroma4" 
-model_name = "text-embedding-3-large"
+collection_name = "tolstoy"
+collection_path = "chroma6" 
+model_name = "jinaai/jina-embeddings-v2-base-en"
 
 def plot_dendrogram(model, **kwargs):
     # Create linkage matrix and then plot the dendrogram
@@ -56,7 +56,7 @@ def main():
     rng = np.random.default_rng()
     rand_item = rng.integers(0, count)
     DisplayOne("Some doc", GetDocById(collection, rand_item))
-    
+  
     n_comps = 20
     pca = PCA(n_components=n_comps)
     reduced = pca.fit_transform(vectors)

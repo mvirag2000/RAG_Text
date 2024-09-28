@@ -5,6 +5,9 @@ import spacy
 from spacy.tokens import Doc
 from transformers import AutoModel
 from transformers import AutoTokenizer
+from langchain_community.document_loaders import DirectoryLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import TextLoader
 import numpy as np
 import shutil
 import os
@@ -18,6 +21,35 @@ model = AutoModel.from_pretrained('jinaai/jina-embeddings-v2-base-en', trust_rem
 collection_name = "tolstoy"
 collection_path = "chroma6" 
 model_name = "jinaai/jina-embeddings-v2-base-en"
+
+def langchain_chunker(source):
+    """
+    To replace Spacy sentence chunker with LangChain we need to add span tuples 
+    """
+    path, chapter_number = source.rsplit('/', 1)
+    book = open(source, 'r')
+    chapter = book.read()
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1200,
+        chunk_overlap=100,
+        length_function=len,
+        add_start_index=True,
+    )
+    chunks = text_splitter.split_text(chapter)
+    start = 0
+    span_tuples = []
+    metadatas = []
+    for chunk in chunks:
+        l = len(chunk)
+        t = start, start + l - 1
+        start = start + l
+        span_tuples.append(t)
+        metadata = {"span": t, "chapter": chapter_number}
+        metadatas.append(metadata)
+
+    print(f"Split {len(chapter)} characters into {len(chunks)} chunks.")
+    book.close()
+    return chunks, span_tuples, metadatas
 
 def sentence_chunker(document, batch_size=None):
     """
@@ -52,9 +84,7 @@ def late_chunking(model_output: 'BatchEncoding', span_annotation: list, max_leng
     token_embeddings = model_output[0]
     outputs = []
     for embeddings, annotations in zip(token_embeddings, span_annotation):
-        if (
-            max_length is not None
-        ):  # remove annotations which go bejond the max-length of the model
+        if (max_length is not None):  # remove annotations which go bejond the max-length of the model
             annotations = [
                 (start, min(end, max_length - 1))
                 for (start, end) in annotations
@@ -72,16 +102,7 @@ def late_chunking(model_output: 'BatchEncoding', span_annotation: list, max_leng
 
     return outputs
 
-def main():
-    source = "data/" + collection_name + "/Chapter_4.txt"
-    path = "data/" + collection_name + "/" + collection_path 
-    book = open(source, 'r')
-    document = book.read()
-    chunks, span_annotations = sentence_chunker(document)
-    inputs = tokenizer(document, return_tensors='pt')
-    model_output = model(**inputs)
-    embeddings = late_chunking(model_output, [span_annotations])[0]
-
+def write_chroma(path, collection_name, chunks, embeddings, metadatas):
     # Clear directory or collection
     if os.path.exists(path):
         shutil.rmtree(path)
@@ -95,7 +116,7 @@ def main():
     )
     collection.add(
         documents = chunks, # This line throws error 400 if docs is too big (length or chunk size)
-        metadatas = [{"start": s[0], "end": s[1]} for s in span_annotations],
+        metadatas = metadatas,
         embeddings = [e.tolist() for e in embeddings],
         ids=[str(i) for i in range(len(chunks))],
     )
@@ -103,6 +124,23 @@ def main():
     readme = open(path + "\\readme.txt", 'w')
     readme.write("Created using native Chroma with " + model_name)
     readme.close()
+
+def main():
+    source = "data/" + collection_name + "/Chapter_4.txt"
+    path = "data/" + collection_name + "/" + collection_path 
+
+    puke_dict = lambda d: [print(i, d[i].shape) for i in d]
+
+    chunks, span_tuples, metadatas = langchain_chunker(source)
+
+    book = open(source, 'r')
+    chapter = book.read()
+    inputs = tokenizer(chapter, return_tensors='pt')  
+    token_embeddings = model(**inputs)
+    puke_dict(token_embeddings)
+    embeddings = late_chunking(token_embeddings, [span_tuples])[0]
+    norms = [np.linalg.norm(e) for e in embeddings]
+    write_chroma(path, collection_name, chunks, embeddings, metadatas)
 
 if __name__ == "__main__":
     main()

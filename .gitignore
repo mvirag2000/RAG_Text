@@ -374,8 +374,7 @@ FodyWeavers.xsd
 /gigaword5.txt
 /gigaword
 /gigaword.vectors.npy
-/data/eliot/Middlemarch.txt
-/data
+/data/
 /chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/data_level0.bin
 /chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/header.bin
 /chroma/a486676b-1569-47e2-aee8-9ab8fb42f6fe/index_metadata.pickle
