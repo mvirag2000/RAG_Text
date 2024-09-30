@@ -11,6 +11,7 @@ double_query - run same query against both novels and pass to Chat for comment
 data_checker - performs a variety of stats operations on a single collection
 clustering - attempts to find (and visualize) similar clusters from the text
 late_chunking - create database using latest chunking technique
+compare_util - similarity metrics between two novels
 
 WORD Embeddings
 glove - experiment with Glove embedding

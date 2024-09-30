@@ -115,10 +115,12 @@ def write_chroma(path, collection_name, chunks, embeddings, metadatas):
         # embedding_function is optional 
     )
     collection.add(
-        documents = chunks, # This line throws error 400 if docs is too big (length or chunk size)
+        documents = chunks,
         metadatas = metadatas,
         embeddings = [e.tolist() for e in embeddings],
-        ids=[str(i) for i in range(len(chunks))],
+        ids=[
+            str(i) for i in range(len(chunks))
+        ],
     )
     print(f"Saved {len(chunks)} chunks to {path}.")
     readme = open(path + "\\readme.txt", 'w')

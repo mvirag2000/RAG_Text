@@ -2,9 +2,12 @@
 ## Read text and vectors from Chroma DB 
 ##
 from dotenv import load_dotenv
-from chroma_utils import CreateEmbedding, DisplayDocs, GetCollection, GetDocById, BruteScan
+from chroma_utils import CreateEmbedding, DisplayDocs, GetCollection, GetDocById
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+
+collection_path = "chroma2" 
+model_name = "text-embedding-3-small"
 
 PROMPT_TEMPLATE = """
 As context for the question that follows, here are some passages from the novel Vanity Fair:
@@ -18,15 +21,14 @@ As further context, here are some passages from the novel War and Peace:
 Compare the two novels, with reference to the context provided.
 """
 
-
 def main():
     n = 3
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     model = ChatOpenAI(model='gpt-3.5-turbo')
 
-    tolstoy = GetCollection("tolstoy", "chroma2")
+    tolstoy = GetCollection("tolstoy", collection_path, model_name)
     # eliot = GetCollection("eliot")
-    thackeray = GetCollection("thackeray", "chroma2")
+    thackeray = GetCollection("thackeray", collection_path, model_name)
 
     for i in range(thackeray.count()):
         results1 = GetDocById(thackeray, i, True)

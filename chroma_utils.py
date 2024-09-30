@@ -59,7 +59,7 @@ def CreateChromaNative(docs, path, name, model_name):
 
         collection.add(documents = [doc.page_content for doc in docs], # This line throws error 400 if docs is too big (length or chunk size)
             metadatas = [doc.metadata for doc in docs],
-            ids=[str(i + c * chunk_size) for i in range(len(docs))],
+            ids = [str(i + c * chunk_size) for i in range(len(docs))],
         )
         print(f"Saved {len(docs)} chunks to {path}.")
 
