@@ -1,1 +1,1 @@
-Experimenting with RAG and langchain.  H/t Pixegami. 
+RAG project with LangChain, Chroma, OpenAI
