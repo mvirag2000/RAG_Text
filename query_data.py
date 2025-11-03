@@ -6,11 +6,12 @@ from langchain_chroma import Chroma
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 
-CHROMA_PATH = "data/tolstoy/chroma"
+# CHROMA_PATH = "data/tolstoy/chroma"
+CHROMA_PATH = "F:/Studio/Automotive/magazine_db"
 
 PROMPT_TEMPLATE = """Answer this question: {question} based on these excerpts: {context}"""
 
-model_name = "text-embedding-3-large" 
+model_name = "text-embedding-3-small" #Tolstoy was -large 
 
 def show_text(title, text):
     window = tk.Tk()
@@ -43,7 +44,7 @@ def main():
 
         if len(results) == 0 or results[0][1] < 0.7:
             print(f"Unable to find matching results.")
-            stop
+          
         else:
             context_text = "\n---\n".join([doc.page_content for doc, _score in results])
             prompt = prompt_template.format(context=context_text, question=query_text)      

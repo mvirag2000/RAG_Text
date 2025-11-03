@@ -30,15 +30,28 @@ def load_model(init=True):
         clean_model = KeyedVectors.load("cleaned-model")
     return clean_model
 
-def in_tolerance(num1, num2, tol=0.0001):
+def in_tolerance(num1, num2, tol=0.00001):
     if ((num1 - num2) > tol): return False
     if ((num2 - num1) > tol): return False
     return True
 
+#giant_score = input("Giant score: ")
+#enemy_score = input("Enemy score: ")
 model = load_model(False)
 keys = model.key_to_index.keys()
-giant = 0.0144
-enemy = 0.1319
+words = list(model.index_to_key)
+
+# The Marinade Digression
+for word in words:
+    simil_marinade = model.similarity(word, "marinade")
+    if (simil_marinade > 0.70):
+        print(f"{word} {simil_marinade:,.6f}")
+
+stop
+
+# Semantle Solver
+giant = float(giant_score) / 100
+enemy = float(enemy_score) / 100
 tolerance = 0.0001
 for w in keys:
     simil_giant = model.similarity(w, "giant")
@@ -47,15 +60,7 @@ for w in keys:
         if in_tolerance(simil_enemy, enemy):
             print(w)
 
-word = 'inevitable'
-vector = model[word]   
-similar_words = model.most_similar(word, topn=5)
-for item in similar_words: 
-    print(item)
 
-print(model.similarity("inevitable", "inexorable"))
-print(model.similarity("inevitable", "ineluctable"))
-print(model.similarity("ineluctable", "inexorable"))
 
 
 

@@ -8,13 +8,13 @@ from chroma_utils import CrossDistances, DisplayOne, GetCollection, GetDocById
 from sklearn.decomposition import PCA
 from sklearn.cluster import AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
-import umap
+import umap 
 import hdbscan 
 sns.set_palette(sns.color_palette() )
 
-collection_name = "tolstoy"
-collection_path = "chroma6" 
-model_name = "jinaai/jina-embeddings-v2-base-en"
+collection_name = "thackeray"
+collection_path = "chroma2" 
+model_name = "text-embedding-3-small"
 
 def plot_dendrogram(model, **kwargs):
     # Create linkage matrix and then plot the dendrogram
