@@ -1,10 +1,9 @@
 ##
 ## Using native Chroma or LangChain to create database
 ##
-from langchain_community.document_loaders import DirectoryLoader
-from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_experimental.text_splitter import SemanticChunker 
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+# from langchain_experimental.text_splitter import SemanticChunker 
 from langchain_chroma import Chroma 
 from langchain_openai import OpenAIEmbeddings
 import openai
@@ -16,7 +15,7 @@ import shutil
 from chroma_utils import CreateChromaNative, PrintChunk
 
 load_dotenv()
-openai.api_key = os.environ['OPENAI_API_KEY']
+# openai.api_key = os.environ['OPENAI_API_KEY'] LangChain now finds key automatically 
 
 collection_name = "tolstoy"
 collection_path = "chroma5" 

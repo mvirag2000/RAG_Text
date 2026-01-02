@@ -1,6 +1,6 @@
 from chromadb.utils import embedding_functions 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 import openai
 from openai import OpenAI
 from dotenv import load_dotenv
