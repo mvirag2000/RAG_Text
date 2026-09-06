@@ -386,3 +386,5 @@ FodyWeavers.xsd
 /BERT Model.jpg
 /Late Chunking.vsdx
 /requirements.txt
+/EmbeddingPCA.gif
+/vocab_embeddings.npy
