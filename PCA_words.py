@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D 
 import matplotlib.animation as animation
 from sklearn.decomposition import PCA
+import pandas as pd
 from wordfreq import top_n_list
 
 vocab = top_n_list('en', 50000)
@@ -68,12 +69,12 @@ def project3D(points, labels):
     three_D = points
     x, y, z = three_D[:,0], three_D[:,1], three_D[:,2]
     ax.scatter(x, y, z)
-    ax.set_xlabel('X Axis')
-    ax.set_ylabel('Y Axis')
-    ax.set_zlabel('Z Axis')
+    ax.set_xlabel('PC1')
+    ax.set_ylabel('PC2')
+    ax.set_zlabel('PC3')
     for label, x, y, z in zip(labels, x, y, z): 
         ax.text(x, y, z, label)
-        print(label, x, y, z)
+        print(f"{label} = ({x:.4f}, {y:.4f}, {z:.4f})")
     def rotate(angle): 
         ax.view_init(elev=10, azim=angle)
     rot_animation = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 360, 2))
@@ -91,6 +92,9 @@ print(some_words)
 some_vectors = get_vectors(some_words)
 pca = PCA(n_components=3)
 reduced = pca.fit_transform(some_vectors)
-print("Unexplained: %1.2f" % (100 - 100*np.sum(pca.explained_variance_ratio_)))
-
+for i, v in enumerate(pca.explained_variance_ratio_, 1):
+    print(f"PC{i}: {v:.1%}")
 project3D(reduced, some_words)
+
+df = pd.DataFrame(reduced, columns=['PC1', 'PC2', 'PC3'], index=some_words)
+print(df.sort_values('PC1'))
